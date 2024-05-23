@@ -12,3 +12,5 @@ authors:
     family-names: Fjalestad
     email: torleivf@stud.ntnu.no
     affiliation: Norwegian University of Science and Technology
+repository-code: >-
+  https://github.com/torleivf/Optimization-based_control_of_cooling_plant_with_dissimilar_chillers
