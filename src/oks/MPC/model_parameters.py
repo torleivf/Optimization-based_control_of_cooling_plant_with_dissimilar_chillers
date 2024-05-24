@@ -104,14 +104,26 @@ class Chiller:
         ][time_horizon_start]
         if math.isnan(self.initial_chiller_output_water_temperature):
             self.initial_chiller_output_water_temperature = 0
+        self.initial_chiller_flow_mode = self.compute_chiller_flow_mode(
+            input_power=self.initial_chiller_input_power,
+        )
+        default_inactive_chiller_input_temperature = 10
         self.initial_chiller_input_water_temperature = dataframe[
             self.input_temperature_apis_id
         ][time_horizon_start]
         if math.isnan(self.initial_chiller_input_water_temperature):
-            self.initial_chiller_input_water_temperature = 0
-        self.initial_chiller_flow_mode = self.compute_chiller_flow_mode(
-            input_power=self.initial_chiller_input_power,
-        )
+            self.initial_chiller_input_water_temperature = (
+                default_inactive_chiller_input_temperature
+            )
+        if (
+            self.initial_chiller_flow_mode == 0
+            and self.initial_chiller_input_water_temperature
+            > default_inactive_chiller_input_temperature
+        ):
+            self.initial_chiller_input_water_temperature = (
+                default_inactive_chiller_input_temperature
+            )
+
         input_power_prediction_start_minute = (
             self.theta_startup - self.input_power_prediction_minutes
         )

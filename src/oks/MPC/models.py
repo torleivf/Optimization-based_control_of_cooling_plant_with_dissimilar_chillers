@@ -461,7 +461,7 @@ def get_chiller_input_water_heating(m, t, c):
 def get_inactive_chiller_input_water_heating(m, t, c):
     if t == 0:
         return (
-            m.initial_chiller_input_water_temperature[c]
+            m.chiller_input_water_temperature[t, c]
             * m.maximum_chiller_volumetric_flow[c]
             * m.water_density
             * m.water_heat_capacity
@@ -499,8 +499,7 @@ def set_input_water_heating_constraints(m):
 def _chiller_input_water_temperature(m, t, c):
     if t == 0:
         return m.chiller_input_water_temperature[t, c] == (
-            m.initial_chiller_input_water_temperature[c] * m.chiller_mode[t, c]
-            + m.initial_supply_water_temperature * (1 - m.chiller_mode[t, c])
+            m.parameters.get_initial_chiller_input_water_temperature(m, c)
         )
     return m.chiller_input_water_temperature[t, c] == m.chiller_input_water_heating[
         t, c

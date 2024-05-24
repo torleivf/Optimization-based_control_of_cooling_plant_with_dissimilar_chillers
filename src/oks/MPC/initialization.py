@@ -133,9 +133,6 @@ def initialize_model_parameters(
         model.chiller,
         initialize=parameters.get_initial_chiller_output_water_temperature,
     )
-    model.initial_chiller_input_water_temperature = pyo.Param(
-        model.chiller, initialize=parameters.get_initial_chiller_input_water_temperature
-    )
     model.initial_chiller_flow_mode = pyo.Param(
         model.chiller, initialize=parameters.get_initial_chiller_mode
     )
