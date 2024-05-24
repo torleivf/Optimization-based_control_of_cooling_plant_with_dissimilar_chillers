@@ -1,6 +1,7 @@
 import streamlit as st
 import pyomo.environ as pyo
 
+import src.oks.MPC.initialization
 import src.oks.MPC.model_parameters
 from src.oks.MPC import models
 from src.oks.MPC import actions
@@ -40,7 +41,7 @@ while True:
     parameters = src.oks.MPC.model_parameters.get_model_parameters(
         optimization_data=optimization_data
     )
-    model = models.get_model(parameters=parameters)
+    model = src.oks.MPC.initialization.get_model(parameters=parameters)
 
     progress_bar.progress(10, text="Optimizing...")
     solver = pyo.SolverFactory("cbc.exe")
