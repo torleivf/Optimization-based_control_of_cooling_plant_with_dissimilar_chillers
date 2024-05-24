@@ -22,5 +22,3 @@ def get_historical_data(filename):
         index_col=date_column,
     )
     return data
-
-

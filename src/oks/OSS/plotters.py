@@ -32,9 +32,9 @@ def get_chiller_short_label(chiller):
 
 
 def get_standard_plot(
-        plot_data,
-        model,
-        chillers=None,
+    plot_data,
+    model,
+    chillers=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -201,8 +201,8 @@ def plot_output_water_temperature_legends(ax, chillers=None):
                 color=chiller.colour,
                 linestyle=chiller.model_line_style,
                 label=f"Output water "
-                      f"temperature of chiller {chiller.number}"
-                      f" - {get_chiller_short_label(chiller)}",
+                f"temperature of chiller {chiller.number}"
+                f" - {get_chiller_short_label(chiller)}",
             )
         )
     chiller_output_water_legend = ax.legend(
@@ -230,7 +230,7 @@ def plot_input_water_temperature_legends(ax, chillers=None):
         color=river_chilled_water_colour,
         linestyle=river_chilled_water_dash,
         label=f"River chilled water temperature"
-              f" - {river_chilled_water_short_label}",
+        f" - {river_chilled_water_short_label}",
     )
     model_legend = ax.legend(
         handles=[
@@ -249,8 +249,8 @@ def plot_input_water_temperature_legends(ax, chillers=None):
                 color=chiller.colour,
                 linestyle=chiller.model_line_style,
                 label=f"Input water "
-                      f"temperature of chiller {chiller.number}"
-                      f" - {get_chiller_short_label(chiller)}",
+                f"temperature of chiller {chiller.number}"
+                f" - {get_chiller_short_label(chiller)}",
             )
         )
     chiller_input_water_legend = ax.legend(
@@ -296,8 +296,8 @@ def plot_output_power_legends(ax, chillers=None):
                 color=chiller.colour,
                 linestyle=chiller.model_line_style,
                 label=f"Chilling from chiller {chiller.number}"
-                      f" - "
-                      f"{get_chiller_short_label(chiller)}",
+                f" - "
+                f"{get_chiller_short_label(chiller)}",
             )
         )
     chiller_output_power_legend = ax.legend(
@@ -321,7 +321,7 @@ def plot_input_power_legends(ax, chillers=None):
                 color=chiller.colour,
                 linestyle=chiller.model_line_style,
                 label=f"Power consumption of chiller {chiller.number}"
-                      f" - {get_chiller_short_label(chiller)}",
+                f" - {get_chiller_short_label(chiller)}",
             )
         )
     chiller_input_power_legend = ax.legend(
@@ -342,7 +342,7 @@ def plot_volumetric_flow_legends(ax, chillers=None):
         color=supply_colour,
         linestyle=supply_dash,
         label=f"Volumetric flow of supply water to the hospital"
-              f" - {supply_short_label}",
+        f" - {supply_short_label}",
     )
     model_plant_line = mlines.Line2D(
         [],
@@ -357,7 +357,7 @@ def plot_volumetric_flow_legends(ax, chillers=None):
         color=active_flow_colour,
         linestyle=active_flow_dash,
         label=f"Total volumetric flow through active chillers"
-              f" - {active_flow_short_label}",
+        f" - {active_flow_short_label}",
     )
     model_active_approximation_line = mlines.Line2D(
         [],
@@ -365,7 +365,7 @@ def plot_volumetric_flow_legends(ax, chillers=None):
         color=active_flow_colour,
         linestyle=active_approximation_dot,
         label=f"Approximation of total volumetric flow through active chillers"
-              f" - {active_flow_short_label}",
+        f" - {active_flow_short_label}",
     )
     model_legend = ax.legend(
         handles=[
@@ -386,9 +386,9 @@ def plot_volumetric_flow_legends(ax, chillers=None):
                 color=chiller.colour,
                 linestyle=chiller.model_line_style,
                 label=f"Volumetric flow through "
-                      f"chiller {chiller.number}"
-                      f" - "
-                      f"{get_chiller_short_label(chiller)}",
+                f"chiller {chiller.number}"
+                f" - "
+                f"{get_chiller_short_label(chiller)}",
             )
         )
     chiller_volumetric_flow_legend = ax.legend(
@@ -502,11 +502,11 @@ def add_figure_legends(fig, axs, chillers=None):
 
 
 def plot_historical_water_temperatures(
-        ax,
-        dataframe,
-        outputs_only=False,
-        inputs_only=False,
-        thick_supply_water_line=True,
+    ax,
+    dataframe,
+    outputs_only=False,
+    inputs_only=False,
+    thick_supply_water_line=True,
 ):
     py_index = dataframe.index.to_pydatetime()
     if not inputs_only:
@@ -518,7 +518,9 @@ def plot_historical_water_temperatures(
         )
     if not outputs_only:
         ax.plot(
-            py_index, dataframe["CT11"], color=return_colour,
+            py_index,
+            dataframe["CT11"],
+            color=return_colour,
         )
     ax.set_ylabel("$\degree$C")
     ax.grid(True)
@@ -532,10 +534,10 @@ def plot_historical_cooling_load(ax, dataframe):
 
 
 def plot_historical_chiller_output_power(
-        ax,
-        dataframe,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    dataframe,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -552,10 +554,10 @@ def plot_historical_chiller_output_power(
 
 
 def plot_historical_chiller_input(
-        ax,
-        dataframe,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    dataframe,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -573,7 +575,7 @@ def plot_historical_chiller_input(
 
 
 def plot_historical_chiller_output_temperatures(
-        ax, dataframe, chillers=None, only_chiller_number=None
+    ax, dataframe, chillers=None, only_chiller_number=None
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -590,10 +592,10 @@ def plot_historical_chiller_output_temperatures(
 
 
 def plot_historical_chiller_input_temperatures(
-        ax,
-        dataframe,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    dataframe,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -617,10 +619,10 @@ def plot_historical_volumetric_flow(ax, dataframe):
 
 
 def plot_model_volumetric_flows(
-        ax,
-        model,
-        chillers=None,
-        plot_chillers=False,
+    ax,
+    model,
+    chillers=None,
+    plot_chillers=False,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -674,8 +676,8 @@ def plot_model_volumetric_flows(
             )
             for i, tau in enumerate(model.time):
                 active_flow[i] += (
-                        all_chiller_flow_modes[(tau, chiller.number)]
-                        * chiller.max_volumetric_flow
+                    all_chiller_flow_modes[(tau, chiller.number)]
+                    * chiller.max_volumetric_flow
                 )
         ax.plot(
             py_index,
@@ -690,10 +692,10 @@ def plot_model_volumetric_flows(
 
 
 def plot_model_chiller_input(
-        ax,
-        model,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    model,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -719,10 +721,10 @@ def plot_model_chiller_input(
 
 
 def plot_model_chiller_output_power(
-        ax,
-        model,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    model,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -785,11 +787,11 @@ def plot_model_cooling_load(ax, model):
 
 
 def plot_model_water_temperatures(
-        ax,
-        model,
-        outputs_only=False,
-        inputs_only=False,
-        thick_supply_water_line=False,
+    ax,
+    model,
+    outputs_only=False,
+    inputs_only=False,
+    thick_supply_water_line=False,
 ):
     py_index = [
         model.time_horizon_start_date.value.to_pydatetime() + pd.Timedelta(minutes=tau)
@@ -833,10 +835,10 @@ def plot_model_water_temperatures(
 
 
 def plot_model_chiller_output_temperatures(
-        ax,
-        model,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    model,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -865,10 +867,10 @@ def plot_model_chiller_output_temperatures(
 
 
 def plot_model_chiller_input_temperatures(
-        ax,
-        model,
-        chillers=None,
-        only_chiller_number=None,
+    ax,
+    model,
+    chillers=None,
+    only_chiller_number=None,
 ):
     if chillers is None:
         chillers = get_default_chillers()
@@ -885,7 +887,7 @@ def plot_model_chiller_input_temperatures(
             ax.plot(
                 py_index,
                 chiller_input_temperature,
-                color= chiller.colour,
+                color=chiller.colour,
                 linestyle=chiller.model_line_style,
             )
     ax.set_ylabel("$\degree$C")

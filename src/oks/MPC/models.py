@@ -64,7 +64,8 @@ def initialize_model_parameters(
         initialize=parameters.get_initial_supply_water_temperature
     )
     model.initial_chiller_output_water_temperature = pyo.Param(
-        model.chiller, initialize=parameters.get_initial_chiller_output_water_temperature
+        model.chiller,
+        initialize=parameters.get_initial_chiller_output_water_temperature,
     )
     model.initial_chiller_input_water_temperature = pyo.Param(
         model.chiller, initialize=parameters.get_initial_chiller_input_water_temperature
@@ -154,12 +155,14 @@ def initialize_optimization_objective(
     # Objective function rule
     def _objective(_model):
         supply_water_violation_cost = (
-                _model.supply_temperature_violation_cost_multiplier
-                * sum(_model.supply_water_temperature_violation[t] for t in _model.time)
+            _model.supply_temperature_violation_cost_multiplier
+            * sum(_model.supply_water_temperature_violation[t] for t in _model.time)
         )
 
         chiller_startup_cost = _model.chiller_startup_cost_multiplier * sum(
-            _model.chiller_startup_mode[t, c] for c in _model.chiller for t in _model.time
+            _model.chiller_startup_mode[t, c]
+            for c in _model.chiller
+            for t in _model.time
         )
 
         energy_cost = _model.chiller_energy_cost_multiplier * sum(
@@ -169,13 +172,15 @@ def initialize_optimization_objective(
         )
 
         cooling_load_capacity_violation_cost = (
-                _model.capacity_violation_cost_multiplier
-                * sum(_model.cooling_load_capacity_violation[t] for t in _model.time)
+            _model.capacity_violation_cost_multiplier
+            * sum(_model.cooling_load_capacity_violation[t] for t in _model.time)
         )
 
         supply_water_temperature_below_setpoint_cost = (
-                _model.supply_water_temperature_below_setpoint_cost_multiplier
-                * sum(_model.supply_water_temperature_below_setpoint[t] for t in _model.time)
+            _model.supply_water_temperature_below_setpoint_cost_multiplier
+            * sum(
+                _model.supply_water_temperature_below_setpoint[t] for t in _model.time
+            )
         )
 
         return (
@@ -194,8 +199,7 @@ def get_model(
 ):
     model = initialize_model(parameters=parameters)
 
-    initialize_model_parameters(
-        model=model)
+    initialize_model_parameters(model=model)
 
     # Actuators
     model.chiller_mode = pyo.Var(model.time, model.chiller, domain=pyo.Binary)
@@ -215,21 +219,31 @@ def get_model(
     model.chiller_input_water_temperature = pyo.Var(model.time, model.chiller)
     model.chiller_input_water_heating = pyo.Var(model.time, model.chiller)
     model.chiller_input_water_return_heating = pyo.Var(model.time, model.chiller)
-    model.chiller_input_water_backflow_heating_subtraction = pyo.Var(model.time, model.chiller)
+    model.chiller_input_water_backflow_heating_subtraction = pyo.Var(
+        model.time, model.chiller
+    )
 
     model.cooling_load = pyo.Var(model.time)
 
     # Layered variables
-    model.chiller_return_water_overflow_heating_subtraction = pyo.Var(model.time, model.chiller)
+    model.chiller_return_water_overflow_heating_subtraction = pyo.Var(
+        model.time, model.chiller
+    )
 
     # Constraint helpers
     model.chiller_startup_mode = pyo.Var(model.time, model.chiller, domain=pyo.Binary)
-    model.supply_water_temperature_below_setpoint = pyo.Var(model.time, domain=pyo.Binary)
+    model.supply_water_temperature_below_setpoint = pyo.Var(
+        model.time, domain=pyo.Binary
+    )
     model.return_water_overflow_binary = pyo.Var(model.time, domain=pyo.Binary)
 
     # Slack variables
-    model.supply_water_temperature_violation = pyo.Var(model.time, domain=pyo.NonNegativeReals)
-    model.cooling_load_capacity_violation = pyo.Var(model.time, domain=pyo.NonNegativeReals)
+    model.supply_water_temperature_violation = pyo.Var(
+        model.time, domain=pyo.NonNegativeReals
+    )
+    model.cooling_load_capacity_violation = pyo.Var(
+        model.time, domain=pyo.NonNegativeReals
+    )
 
     # Model constraints
     initialize_model_constraints(model)
@@ -250,7 +264,9 @@ def get_model(
     )
 
     model.chiller_mode_change_block_constraint = pyo.Constraint(
-        model.time, model.chiller, rule=_only_change_chiller_mode_during_initial_time_steps
+        model.time,
+        model.chiller,
+        rule=_only_change_chiller_mode_during_initial_time_steps,
     )
 
     initialize_optimization_objective(
@@ -377,6 +393,7 @@ def _return_water_overflow_binary_max(m, t):
 
 
 # Big M regional function constraints
+
 
 def apply_model_constraint(model, root_name, chiller_constraint=False):
     def decorator(function):
@@ -799,11 +816,11 @@ def _chiller_output_power(m, t, c):
         m.chiller_output_power[t - m.time_step, c]
         + (
             relevant_input_power * m.chiller_average_coefficient_of_performance[c]
-            -
-            m.chiller_output_power[t - m.time_step, c]
+            - m.chiller_output_power[t - m.time_step, c]
         )
         * m.parameters.get_chiller_in_out_discrete_time_constant_coefficient(m, c)
     )
+
 
 def get_supply_heat_exceeding_return_heat_big_m_max(m, t):
     return (
@@ -910,6 +927,7 @@ def set_chiller_input_power_constraints(m_):
 
 
 # Binary constraints
+
 
 def set_chiller_startup_mode_constraints(m):
     m.chiller_startup_upper_mode_constraint = pyo.Constraint(

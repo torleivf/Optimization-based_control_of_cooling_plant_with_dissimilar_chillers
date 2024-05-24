@@ -37,7 +37,9 @@ while True:
     optimization_data = data.get_optimization_data(offset=offset)
 
     progress_bar.progress(5, text="Setting up model...")
-    parameters = src.oks.MPC.model_parameters.get_model_parameters(optimization_data=optimization_data)
+    parameters = src.oks.MPC.model_parameters.get_model_parameters(
+        optimization_data=optimization_data
+    )
     model = models.get_model(parameters=parameters)
 
     progress_bar.progress(10, text="Optimizing...")
@@ -61,13 +63,15 @@ while True:
 
     progress_bar.progress(93, text="Recommending chiller actions...")
     with chiller_mode_text:
-        chiller_mode_description = (
-            actions.get_chiller_mode_description(model=model, chillers=model.parameters.chillers)
+        chiller_mode_description = actions.get_chiller_mode_description(
+            model=model, chillers=model.parameters.chillers
         )
         chiller_mode_text.markdown(chiller_mode_description)
 
     progress_bar.progress(95, text="Plotting...")
-    fig = plotters.get_standard_plot(plot_data=optimization_data, model=model, chillers=model.parameters.chillers)
+    fig = plotters.get_standard_plot(
+        plot_data=optimization_data, model=model, chillers=model.parameters.chillers
+    )
 
     with plot_holder:
         st.pyplot(fig)
