@@ -23,8 +23,8 @@ class Chiller:
         theta_startup,  # minutes
         energy_source: EnergySource,
         average_coefficient_of_performance,  # MW/MW
-        in_out_discrete_time_constant_coefficient,
-        input_evolution_discrete_time_constant_coefficient,
+        tau_output,
+        tau_input,
         colour,
         model_line_style,
         effect_apis_id,
@@ -43,8 +43,8 @@ class Chiller:
             0.001 if energy_source == EnergySource.ELECTRICITY else 1
         )
         self.theta_output = theta_output
-        self.in_out_discrete_time_constant_coefficient = (
-            in_out_discrete_time_constant_coefficient
+        self.tau_output = (
+            tau_output
         )
         self.average_coefficient_of_performance = average_coefficient_of_performance
         self.theta_startup = theta_startup
@@ -61,8 +61,8 @@ class Chiller:
             if energy_source == EnergySource.ELECTRICITY
             else 0
         )
-        self.input_evolution_discrete_time_constant_coefficient = (
-            input_evolution_discrete_time_constant_coefficient
+        self.tau_input = (
+            tau_input
         )
 
         # plot and data retrieval settings
@@ -200,8 +200,8 @@ def get_default_chillers() -> list[Chiller]:
             theta_startup=2,
             energy_source=EnergySource.HEAT,
             average_coefficient_of_performance=0.6,
-            in_out_discrete_time_constant_coefficient=0.2,
-        input_evolution_discrete_time_constant_coefficient=0.5,
+            tau_output=8,
+        tau_input=2,
             colour="olive",
             model_line_style=(0, (4, 3)),
             effect_apis_id="Q41",
@@ -218,8 +218,8 @@ def get_default_chillers() -> list[Chiller]:
             theta_startup=2,
             energy_source=EnergySource.ELECTRICITY,
             average_coefficient_of_performance=5.7,
-            in_out_discrete_time_constant_coefficient=0.9,
-        input_evolution_discrete_time_constant_coefficient=0.5,
+            tau_output=0.222,
+        tau_input=2,
             colour="purple",
             model_line_style=(0, (4, 4)),
             effect_apis_id="Q51",
@@ -236,8 +236,8 @@ def get_default_chillers() -> list[Chiller]:
             theta_startup=2,
             energy_source=EnergySource.ELECTRICITY,
             average_coefficient_of_performance=4.5,
-            in_out_discrete_time_constant_coefficient=0.7,
-        input_evolution_discrete_time_constant_coefficient=0.5,
+            tau_output=0.857,
+        tau_input=2,
             colour="brown",
             model_line_style=(0, (4, 5)),
             effect_apis_id="Q61",
@@ -254,8 +254,8 @@ def get_default_chillers() -> list[Chiller]:
             theta_startup=2,
             energy_source=EnergySource.HEAT,
             average_coefficient_of_performance=0.6,
-            in_out_discrete_time_constant_coefficient=0.2,
-        input_evolution_discrete_time_constant_coefficient=0.5,
+            tau_output=8,
+        tau_input=2,
             colour="green",
             model_line_style=(0, (4, 6)),
             effect_apis_id="Q71",
@@ -337,8 +337,8 @@ class ModelParameters:
     def get_average_coefficient_of_performance(self, _model, chiller):
         return self.chillers[chiller - 1].average_coefficient_of_performance
 
-    def get_in_out_discrete_time_constant_coefficient(self, _model, chiller):
-        return self.chillers[chiller - 1].in_out_discrete_time_constant_coefficient
+    def get_chiller_in_out_discrete_time_constant_coefficient(self, _model, chiller):
+        return _model.time_step / (_model.time_step + self.chillers[chiller - 1].tau_output)
 
     def get_initial_chiller_mode(self, _model, chiller):
         return self.chillers[chiller - 1].initial_chiller_flow_mode
@@ -414,9 +414,9 @@ class ModelParameters:
     def get_chiller_input_power_evolution_discrete_time_constant_coefficient(
         self, _model, time, chiller
     ):
-        return self.chillers[
+        return _model.time_step / (_model.time_step + self.chillers[
             chiller - 1
-        ].input_evolution_discrete_time_constant_coefficient
+        ].tau_input)
 
     def get_river_chiller_output_power(self, _model, time):
         return self.fixed_variables.river_water_chiller_output_power[time]

@@ -55,9 +55,6 @@ def initialize_model_parameters(
     model.chiller_average_coefficient_of_performance = pyo.Param(
         model.chiller, initialize=parameters.get_average_coefficient_of_performance
     )
-    model.chiller_in_out_discrete_time_constant_coefficient = pyo.Param(
-        model.chiller, initialize=parameters.get_in_out_discrete_time_constant_coefficient
-    )
 
     model.water_density = pyo.Param(initialize=parameters.get_water_density)
     model.water_heat_capacity = pyo.Param(initialize=parameters.get_water_heat_capacity)
@@ -805,7 +802,7 @@ def _chiller_output_power(m, t, c):
             -
             m.chiller_output_power[t - m.time_step, c]
         )
-        * m.chiller_in_out_discrete_time_constant_coefficient[c]
+        * m.parameters.get_chiller_in_out_discrete_time_constant_coefficient(m, c)
     )
 
 def get_supply_heat_exceeding_return_heat_big_m_max(m, t):
