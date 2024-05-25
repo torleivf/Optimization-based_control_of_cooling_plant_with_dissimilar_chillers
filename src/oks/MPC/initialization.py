@@ -9,8 +9,11 @@ from src.oks.MPC.objective import (
 
 
 def get_model(
-    parameters,
+    optimization_data,
 ):
+    parameters = model_parameters.get_model_parameters(
+        optimization_data=optimization_data
+    )
     model = initialize_model(parameters=parameters)
 
     initialize_model_parameters(model=model)
